@@ -21,3 +21,18 @@ exports.addReview = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+// Delete a review (Admin only)
+exports.deleteReview = async (req, res) => {
+    try {
+        const review = await Review.findById(req.params.id);
+        if (!review) {
+            return res.status(404).json({ success: false, message: 'Review not found' });
+        }
+        
+        await review.deleteOne();
+        res.json({ success: true, message: 'Review deleted successfully' });
+    } catch (error) {
+        console.error('Delete review error:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
